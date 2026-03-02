@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Study Portal</title>
+<style>
+body {
+    margin: 0;
+    background-color: #000;
+    color: #00ff88;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.hidden { display: none; }
+
+#loginScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    background: black;
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background: #00ff88;
+    border: none;
+    cursor: pointer;
+}
+
+#clock {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 18px;
+}
+
+#searchContainer {
+    margin-top: 100px;
+}
+
+#searchBar {
+    width: 400px;
+    padding: 12px;
+    font-size: 18px;
+    background: black;
+    color: #00ff88;
+    border: 2px solid #00ff88;
+}
+
+#games {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+iframe {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #00ff88;
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button id="loginBtn">Enter</button>
+</div>
+
+<div id="mainContent" class="hidden">
+
+<div id="clock"></div>
+
+<div id="searchContainer">
+    <form onsubmit="searchGoogle(event)">
+        <input type="text" id="searchBar" placeholder="Search Google...">
+    </form>
+</div>
+
+<div id="games">
+    <!-- EDIT GAME URLS BELOW -->
+    <iframe src="https://www.crazygames.com/"></iframe>
+    <iframe src="https://www.miniclip.com/games/en/"></iframe>
+    <!-- COPY AND ADD MORE <iframe src="URL"></iframe> TO ADD MORE GAMES -->
+</div>
+
+</div>
+
+<script>
+// --- PASSWORD LOGIC ---
+const correctPassword = "admin123";
+
+function unlockDashboard() {
+    const input = document.getElementById("passwordInput").value;
+    if(input === correctPassword){
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("mainContent").classList.remove("hidden");
+    } else {
+        alert("Incorrect Password");
+    }
+}
+
+// Button click
+document.getElementById("loginBtn").addEventListener("click", unlockDashboard);
+
+// Enter key press
+document.getElementById("passwordInput").addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        unlockDashboard();
+    }
+});
+
+// --- GOOGLE SEARCH ---
+function searchGoogle(event){
+    event.preventDefault();
+    const query = document.getElementById("searchBar").value;
+    if(query.trim() !== ""){
+        window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank");
+    }
+}
+
+// --- CLOCK ---
+function updateClock(){
+    const now = new Date();
+    document.getElementById("clock").innerText = now.toLocaleTimeString();
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// --- HIDDEN MODE ---
+document.addEventListener("keydown", function(e){
+    if(e.key.toLowerCase() === "h"){
+        document.title = "Google Docs";
+        document.body.style.background = "white";
+        document.body.style.color = "black";
+        document.getElementById("searchBar").style.border = "1px solid #ccc";
+        document.getElementById("searchBar").style.color = "black";
+        const iframes = document.querySelectorAll("iframe");
+        iframes.forEach(f => f.style.display = "none");
+    }
+});
+</script>
+
+</body>
+</html>
